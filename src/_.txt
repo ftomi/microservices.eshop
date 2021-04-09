@@ -1,0 +1,73 @@
+----- CATALOG.API -----
++ 1. SETUP MONGO
+https://hub.docker.com/_/mongo
+
+docker run -d -p 27017:27017 --name shopping-mongo mongo
+				[port forwarding]   [container name] [image-name]
+
+docker logs -f shopping-mongo
+
+docker exec -it shopping-mongo cmd
+	mongo
+	show dbs
+	create mongo database: use CatalogDb
+								[DBNAME]
+	create collection in prev db: db.createCollection('Products')
+
+	db.Products.find({}).pretty()
+	db.Products.remove({})
+
+	show databases
+	show collections
+
++ 2. SETUP API
+
+Add nuget: MongoDB.Driver
+See appsettings
+Startup
+
++ 3. CONTAINERIZE
+jobbklikk a projekten -> add -> orchestrator support -> docker compose -> windows
+
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
+// ha lenne mongo akkor docker rm [CONTAINERID]
+
+version: '3.4'
+
+services:
+  catalogdb:
+    image: mongo
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services\Catalog\Catalog.API\Dockerfile
+volumes:
+  mongo_data:
+
+
+
+  version: '3.4'
+
+services:
+  catalogdb:
+    container_name: catalogdb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      
+  catalog.api:
+    container_name: catalog.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
+    depends_on:
+      - catalogdb
+    ports:
+      - "8000:80"
+
+
+

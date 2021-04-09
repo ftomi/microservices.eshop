@@ -35,7 +35,7 @@ docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
 docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml down
 
 docker RM $(docker ps -aq)
-docker RMI $(docker images -aq)
+docker RMI $(docker images -q)
 
 version: '3.4'
 

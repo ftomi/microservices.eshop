@@ -71,3 +71,14 @@ services:
 
 
 
+----- BASKET.API -----
++ 1. REDIS SETUP
+
+docker pull redis
+docker run -d -p 6379:6379 --name aspnetrun-redis redis
+
+docker exec -it aspnetrun-redis /bin/bash
+
+Microsoft.Extensions.Caching.StackExchangeRedis
+Newtonsoft.Json
+Swashbuckle.AspNetCore

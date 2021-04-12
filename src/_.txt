@@ -32,6 +32,11 @@ jobbklikk a projekten -> add -> orchestrator support -> docker compose -> window
 docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml up -d
 // ha lenne mongo akkor docker rm [CONTAINERID]
 
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml down
+
+docker RM $(docker ps -aq)
+docker RMI $(docker images -q)
+
 version: '3.4'
 
 services:

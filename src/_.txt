@@ -107,3 +107,6 @@ Add nuget: Npgsql, Dapper
 Nugets from previous
 
 Create proto, right click -> props -> proto compiler & server only
+
+---- BASKET -> DISCOUNT GRPC ----
+Basket.api -> connected services -> GRPC -> Proto -> client

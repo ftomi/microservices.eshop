@@ -50,5 +50,13 @@ namespace Discount.API.Controllers
         {
             return Ok(await _repository.DeleteDiscount(productName));
         }
+        /*
+        [HttpGet(Name = "SeedDiscount")]
+        public async Task<ActionResult> SeedDiscount()
+        {
+            var coupon = await _repository.SeedDiscount();
+            return Ok();
+        }
+        */
     }
 }

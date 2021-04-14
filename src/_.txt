@@ -102,3 +102,8 @@ docker pull postgres
 + 2. SETUP API
 
 Add nuget: Npgsql, Dapper
+
+---- DISCOUNT.GRPC -----
+Nugets from previous
+
+Create proto, right click -> props -> proto compiler & server only

@@ -116,3 +116,7 @@ ddd, cqrs, clean architecture, mediatr, fluentvalidation, automapper etc.
 1 - Ordering.Application -> Mediatr, fluentvalidation, automapper, logging, ordering.domain
 2 - Ordering.Infrastructure -> efcore, sendgrid, ordering.application
 3 - Ordering.API -> efcore, prev. 2
+
+...
+
+Migrations!!!

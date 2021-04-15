@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Ordering.Application.Contracts.Persistence;
-using Ordering.Application.Features.Orders.Queries.GetOrdersList;
+using Ordering.Application.Features.Orders.Queries.GetOrderList;
 using System;
 using System.Collections.Generic;
 using System.Linq;

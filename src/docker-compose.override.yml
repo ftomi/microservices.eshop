@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:c:/data/db
+      - mongo_data:/home/data/db
       
   basketdb:
     container_name: basketdb
@@ -15,6 +15,15 @@ services:
     ports:
       - "6379:6379"
      
+  orderdb:
+    container_name: orderdb
+    environment:
+      - SA_PASSWORD=SwN12345678
+      - ACCEPT_EULA=Y
+    restart: always
+    ports:
+      - 1433:1433
+      
   discountdb:
     container_name: discountdb
     restart: always
@@ -24,6 +33,13 @@ services:
       - POSTGRES_DB=DiscountDb
     ports:
       - 5432:5432
+
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
 
   pgadmin:
     container_name: pgadmin
@@ -42,10 +58,8 @@ services:
       - "8080:8000"
       - "9000:9000"
     volumes:
-      - source: '\\.\pipe\docker_engine'
-        target: '\\.\pipe\docker_engine'
-        type: npipe
-      - portainer_data:C:\data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/home/data/portainer
 
   catalog.api:
     container_name: catalog.api
@@ -88,3 +102,14 @@ services:
       - discountdb
     ports:
       - "8003:80"
+
+  ordering.api:
+    container_name: ordering.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=SwN12345678;"
+    depends_on:
+      - orderdb
+    ports:
+      - "8004:80"
+

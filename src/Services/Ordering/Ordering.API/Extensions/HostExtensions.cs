@@ -15,32 +15,31 @@ namespace Ordering.API.Extensions
         {
             int retryForAvailability = retry.Value;
 
-            using (var scope = host.Services.CreateScope())
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<TContext>>();
+            var context = services.GetService<TContext>();
+
+            try
             {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<TContext>>();
-                var context = services.GetService<TContext>();
+                logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
 
-                try
+                InvokeSeeder(seeder, context, services);
+
+                logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(TContext).Name);
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(TContext).Name);
+
+                if (retryForAvailability < 50)
                 {
-                    logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
-
-                    InvokeSeeder(seeder, context, services);
-
-                    logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(TContext).Name);
-                }
-                catch (SqlException ex)
-                {
-                    logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(TContext).Name);
-
-                    if (retryForAvailability < 50)
-                    {
-                        retryForAvailability++;
-                        System.Threading.Thread.Sleep(2000);
-                        MigrateDatabase<TContext>(host, seeder, retryForAvailability);
-                    }
+                    retryForAvailability++;
+                    System.Threading.Thread.Sleep(2000);
+                    MigrateDatabase<TContext>(host, seeder, retryForAvailability);
                 }
             }
+
             return host;
         }
 

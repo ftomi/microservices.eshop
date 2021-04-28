@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Ordering.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace Ordering.Infrastructure.Persistence
         {
             return new List<Order>
             {
-                new Order() {UserName = "swn", FirstName = "Tom", LastName = "Farkas", EmailAddress = "tomifarkas.dev@gmail.com", AddressLine = "9023 Gyor", Country = "Hungary", TotalPrice = 350 }
+                new Order() {UserName = "swn", FirstName = "Tom", LastName = "Farkas", EmailAddress = "tomifarkas.dev@gmail.com", AddressLine = "9023 Gyor", Country = "Hungary", TotalPrice = Convert.ToDecimal(350) }
             };
         }
     }
